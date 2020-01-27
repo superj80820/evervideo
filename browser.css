@@ -88,21 +88,23 @@ compared to the back/forward buttons */
   height: 25px;
 }
 
-#controls #back {
+/* don't delete */
+/* #controls #back {
   background-image: url(./assets/arrow-left.svg);
   background-repeat: no-repeat;
   background-position: left;
   padding-left: 20px;
   height: 25px;
-}
+} */
 
-#controls #forward {
+/* don't delete */
+/* #controls #forward {
   background-image: url(./assets/arrow-right.svg);
   background-repeat: no-repeat;
   background-position: left;
   padding-left: 20px;
   height: 25px;
-}
+} */
 
 #controls #minimize {
   background-image: url(./assets/window-minimize.svg);

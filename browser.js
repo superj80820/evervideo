@@ -2,6 +2,44 @@ window.onresize = doLayout;
 var isLoading = false;
 const offset = 33;
 let isPin = false;
+const youtubeUrl = 'https://youtube.com/tv#'
+const netflixUrl = 'https://www.netflix.com/browse'
+/**
+ * Bindings that depend on the particular collection of webviews in browser.html
+ *
+ * @see https://developer.chrome.com/apps/tags/webview#method-setUserAgentOverride
+ */
+const userAgentBindings = {
+  'youtube-tv-mode': 'Mozilla/5.0 (SMART-TV; Linux; Tizen 5.0) AppleWebKit/538.1 (KHTML, like Gecko) Version/5.0 NativeTVAds Safari/538.1'
+};
+
+function switchYoutubeOrNetflix (conditions) {
+  return {
+    switchUrlByYoutubeOrNetflix () {
+      switch (conditions) {
+        case 'Youtube':
+          navigateTo('https://youtube.com/tv#')
+          break;
+        case 'Netflix':
+          navigateTo('https://www.netflix.com/browse')
+          break
+      }
+      return this
+    },
+    switchUserAgentByYoutubeOrNetflix () {
+      switch (conditions) {
+        case 'Youtube':
+          document.querySelector('webview[data-name="webviewContent"]').setUserAgentOverride(userAgentBindings['youtube-tv-mode']);
+          break;
+        case 'Netflix':
+          // Reset UserAgent
+          document.querySelector('webview[data-name="webviewContent"]').setUserAgentOverride('');
+          break
+      }
+      return this
+    }
+  }
+}
 
 onload = function() {
   function downOption () {
@@ -28,17 +66,9 @@ onload = function() {
   })
 
   document.querySelector('#selectUri').addEventListener("change", function(uri) {
-    switch (uri.target.value) {
-      case 'Youtube':
-        document.querySelector('webview[data-name="webviewContent"]').setUserAgentOverride(bindings['youtube-tv-mode']);
-        navigateTo('https://youtube.com/tv#')
-        break;
-      case 'Netflix':
-        // Reset UserAgent
-        document.querySelector('webview[data-name="webviewContent"]').setUserAgentOverride('');
-        navigateTo('https://www.netflix.com/browse')
-        break
-    }
+    switchYoutubeOrNetflix(uri.target.value)
+      .switchUserAgentByYoutubeOrNetflix()
+      .switchUrlByYoutubeOrNetflix()
   })
 
   var webview = document.querySelector('webview');
@@ -50,9 +80,10 @@ onload = function() {
   var majorVersion = parseInt(match[1]);
   var buildVersion = parseInt(match[3]);
 
-  document.querySelector('#back').onclick = function() {
-    webview.back();
-  }
+  // don't delete
+  // document.querySelector('#back').onclick = function() {
+  //   webview.back();
+  // }
 
   document.querySelector('#pin').onclick = function() {
     function getImageUri(img) {
@@ -72,9 +103,10 @@ onload = function() {
     }
   }
 
-  document.querySelector('#forward').onclick = function() {
-    webview.forward();
-  };
+  // don't delete
+  // document.querySelector('#forward').onclick = function() {
+  //   webview.forward();
+  // };
 
   document.querySelector('#close').onclick = function() {
     window.close()
@@ -382,14 +414,17 @@ function handleLoadCommit(event) {
   // document.querySelector('#location').value = event.url;
 
   var webview = document.querySelector('webview');
-  document.querySelector('#back').disabled = !webview.canGoBack();
-  document.querySelector('#forward').disabled = !webview.canGoForward();
+  // don't delete
+  // document.querySelector('#back').disabled = !webview.canGoBack();
+  // don't delete
+  // document.querySelector('#forward').disabled = !webview.canGoForward();
   closeBoxes();
 }
 
 function handleLoadStart(event) {
   document.body.classList.add('loading');
   isLoading = true;
+
   document.querySelector('#reload').style = 'background-image: url(./assets/loading.svg);'
 
   resetExitedState();
