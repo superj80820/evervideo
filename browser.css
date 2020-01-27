@@ -21,7 +21,7 @@ input {
   justify-content: flex-end;
   position: relative;
   padding: 3px;
-  top: -30px;
+  top: -33px;
   transition: all 0.2s linear;
   border-bottom: solid 1px #ccc;
   background-color: #eee;
@@ -317,12 +317,6 @@ webview {
   transition: all 0.2s linear;
   bottom: 0;
   left: 0;
-}
-
-/* The reload button turns into a spinning trobber */
-.loading #reload {
-  /* -webkit-animation: spinner-animation .5s infinite linear;
-  -webkit-transform-origin: 50% 55.5%; */
 }
 
 @-webkit-keyframes spinner-animation {

@@ -51,10 +51,10 @@ onload = function() {
   }
 
   function upOption () {
-    doLayout()
+    setLayout()
     const div = document.getElementById('controls')
     div.style['-webkit-app-region'] = null
-    // div.style.top = '-32px'
+    div.style.top = `-${offset}px`
     div.style.opacity = '0%'
   }
 
@@ -72,7 +72,7 @@ onload = function() {
   })
 
   var webview = document.querySelector('webview');
-  doLayout();
+  setLayout();
   webview.focus();
 
   var version = navigator.appVersion.substr(navigator.appVersion.lastIndexOf('Chrome/') + 7);
@@ -112,10 +112,6 @@ onload = function() {
     window.close()
   };
 
-  // document.querySelector('#home').onclick = function() {
-  //   navigateTo('http://www.google.com/');
-  // };
-
   document.querySelector('#reload').onclick = function() {
     if (isLoading) {
       webview.stop();
@@ -131,10 +127,6 @@ onload = function() {
       }
     });
 
-  // document.querySelector('#terminate').onclick = function() {
-  //   webview.terminate();
-  // };
-
   var showClearDataConfirmation = function() {
     document.querySelector('#clear-data-overlay').style.display = '-webkit-box';
     document.querySelector('#clear-data-confirm').style.display = '-webkit-box';
@@ -144,8 +136,6 @@ onload = function() {
     document.querySelector('#clear-data-overlay').style.display = 'none';
     document.querySelector('#clear-data-confirm').style.display = 'none';
   };
-
-  // document.querySelector('#clear-data').onclick = showClearDataConfirmation;
 
   document.querySelector('#clear-data-ok').onclick = function() {
 
@@ -195,87 +185,6 @@ onload = function() {
       typeof(webview.find) == "function") {
     var findMatchCase = false;
 
-    // document.querySelector('#zoom').onclick = function() {
-    //   if(document.querySelector('#zoom-box').style.display == '-webkit-flex') {
-    //     closeZoomBox();
-    //   } else {
-    //     openZoomBox();
-    //   }
-    // };
-
-    // document.querySelector('#zoom-form').onsubmit = function(e) {
-    //   e.preventDefault();
-    //   var zoomText = document.forms['zoom-form']['zoom-text'];
-    //   var zoomFactor = Number(zoomText.value);
-    //   if (zoomFactor > 5) {
-    //     zoomText.value = "5";
-    //     zoomFactor = 5;
-    //   } else if (zoomFactor < 0.25) {
-    //     zoomText.value = "0.25";
-    //     zoomFactor = 0.25;
-    //   }
-    //   webview.setZoom(zoomFactor);
-    // }
-
-    // document.querySelector('#zoom-in').onclick = function(e) {
-    //   e.preventDefault();
-    //   increaseZoom();
-    // }
-
-    // document.querySelector('#zoom-out').onclick = function(e) {
-    //   e.preventDefault();
-    //   decreaseZoom();
-    // }
-
-    // document.querySelector('#find').onclick = function() {
-    //   if(document.querySelector('#find-box').style.display == 'block') {
-    //     document.querySelector('webview').stopFinding();
-    //     closeFindBox();
-    //   } else {
-    //     openFindBox();
-    //   }
-    // };
-
-    // document.querySelector('#find-text').oninput = function(e) {
-    //   webview.find(document.forms['find-form']['find-text'].value,
-    //                {matchCase: findMatchCase});
-    // }
-
-    // document.querySelector('#find-text').onkeydown = function(e) {
-    //   if (event.ctrlKey && event.keyCode == 13) {
-    //     e.preventDefault();
-    //     webview.stopFinding('activate');
-    //     closeFindBox();
-    //   }
-    // }
-
-    // document.querySelector('#match-case').onclick = function(e) {
-    //   e.preventDefault();
-    //   findMatchCase = !findMatchCase;
-    //   var matchCase = document.querySelector('#match-case');
-    //   if (findMatchCase) {
-    //     matchCase.style.color = "blue";
-    //     matchCase.style['font-weight'] = "bold";
-    //   } else {
-    //     matchCase.style.color = "black";
-    //     matchCase.style['font-weight'] = "";
-    //   }
-    //   webview.find(document.forms['find-form']['find-text'].value,
-    //                {matchCase: findMatchCase});
-    // }
-
-    // document.querySelector('#find-backward').onclick = function(e) {
-    //   e.preventDefault();
-    //   webview.find(document.forms['find-form']['find-text'].value,
-    //                {backward: true, matchCase: findMatchCase});
-    // }
-
-    // document.querySelector('#find-form').onsubmit = function(e) {
-    //   e.preventDefault();
-    //   webview.find(document.forms['find-form']['find-text'].value,
-    //                {matchCase: findMatchCase});
-    // }
-
     webview.addEventListener('findupdate', handleFindUpdate);
     window.addEventListener('keydown', handleKeyDown);
   } else {
@@ -296,23 +205,10 @@ function navigateTo(url) {
 }
 
 function doLayout() {
-  var webview = document.querySelector('webview');
-  var controls = document.querySelector('#controls');
-  var controlsHeight = controls.offsetHeight;
-  var windowWidth = document.documentElement.clientWidth;
-  var windowHeight = document.documentElement.clientHeight;
-  var webviewWidth = windowWidth;
-  var webviewHeight = windowHeight - controlsHeight + offset;
-  webview.style.width = webviewWidth + 'px';
-  webview.style.height = webviewHeight + 'px';
-
-  var sadWebview = document.querySelector('#sad-webview');
-  sadWebview.style.width = webviewWidth + 'px';
-  sadWebview.style.height = webviewHeight * 2/3 + 'px';
-  sadWebview.style.paddingTop = webviewHeight/3 + 'px';
+  setLayout()
 }
 
-function setLayout(height) {
+function setLayout(height = 0) {
   var webview = document.querySelector('webview');
   var controls = document.querySelector('#controls');
   var controlsHeight = controls.offsetHeight;
@@ -411,14 +307,11 @@ function handleLoadCommit(event) {
     return;
   }
 
-  // document.querySelector('#location').value = event.url;
-
   var webview = document.querySelector('webview');
   // don't delete
   // document.querySelector('#back').disabled = !webview.canGoBack();
   // don't delete
   // document.querySelector('#forward').disabled = !webview.canGoForward();
-  closeBoxes();
 }
 
 function handleLoadStart(event) {
@@ -431,8 +324,6 @@ function handleLoadStart(event) {
   if (!event.isTopLevel) {
     return;
   }
-
-  // document.querySelector('#location').value = event.url;
 }
 
 function handleLoadStop(event) {
@@ -454,8 +345,6 @@ function handleLoadRedirect(event) {
   if (!event.isTopLevel) {
     return;
   }
-
-  // document.querySelector('#location').value = event.newUrl;
 }
 
 function getNextPresetZoom(zoomFactor) {
@@ -504,24 +393,7 @@ function openZoomBox() {
   });
 }
 
-// function closeZoomBox() {
-  // document.querySelector('#zoom-box').style.display = 'none';
-// }
-
 function openFindBox() {
   document.querySelector('#find-box').style.display = 'block';
   document.forms['find-form']['find-text'].select();
-}
-
-// function closeFindBox() {
-//   var findBox = document.querySelector('#find-box');
-//   findBox.style.display = 'none';
-//   findBox.style.left = "";
-//   findBox.style.opacity = "";
-//   document.querySelector('#find-results').innerText= "";
-// }
-
-function closeBoxes() {
-  // closeZoomBox();
-  // closeFindBox();
 }
