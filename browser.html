@@ -2,40 +2,49 @@
 <html>
   <head>
     <link rel="stylesheet" href="browser.css">
+    <script src="browser_bindings.js"></script>
     <script src="browser.js"></script>
   </head>
   <body>
-    <div id="controls">
+    <div id='draggerHandler'>
+      <div id="controls">
+        <select id="selectUri" style="margin-right: auto;">
+          <option>Netflix</option>
+          <option>Youtube</option>
+        </select>
+        <button id="pin" title="Pin"></button>
+        <button id="back" title="Go Back"></button>
+        <button id="forward" title="Go Forward"></button>
+        <button id="reload" title="Reload"></button>
+        <button id="minimize" title="Minimize"></button>
+        <button id="close" title="Close window"></button>
+        <!-- <button id="terminate" title="Simulate Crash">&#9760;</button> -->
+        <!-- <button id="home" title="Go Home">&#8962;</button>
+        <button id="clear-data" title="Clear Data">&#9851;</button>
 
-      <button id="back" title="Go Back">&#9664;</button>
-      <button id="forward" title="Go Forward">&#9654;</button>
-      <button id="home" title="Go Home">&#8962;</button>
-      <button id="reload" title="Reload">&#10227;</button>
-      <button id="terminate" title="Simulate Crash">&#9760;</button>
-      <button id="clear-data" title="Clear Data">&#9851;</button>
+        <form id="location-form">
+          <div id="center-column">
+            <input id="location" type="text" value="http://www.google.com/">
+          </div>
+          <input type="submit" value="Go">
+        </form>
 
-      <form id="location-form">
-        <div id="center-column">
-          <input id="location" type="text" value="http://www.google.com/">
-        </div>
-        <input type="submit" value="Go">
-      </form>
+        <button id="zoom" title="Change Zoom">&#128270;</button>
+        <button id="find" title="Find in Page">&#128294;</button> -->
 
-      <button id="zoom" title="Change Zoom">&#128270;</button>
-      <button id="find" title="Find in Page">&#128294;</button>
-
+      </div>
     </div>
 
-    <div id="zoom-box">
+    <!-- <div id="zoom-box">
       <form id="zoom-form">
         <input id="zoom-text" type="text">
         <input type="submit" value="&#128270;">
         <button id="zoom-in">&#10133;</button>
         <button id="zoom-out">&#10134;</button>
       </form>
-    </div>
+    </div> -->
 
-    <div id="find-box">
+    <!-- <div id="find-box">
       <form id="find-form">
         <input id="find-text" type="text">
         <div id="find-results"></div>
@@ -44,7 +53,7 @@
         <button id="find-backward">&#60;</button>
         <button id="find-forward">&#62;</button>
       </form>
-    </div>
+    </div> -->
 
     <div id="clear-data-overlay" class="overlay"></div>
     <div id="clear-data-confirm">
@@ -100,8 +109,8 @@
       <button id="clear-data-cancel">Cancel</button>
       <button id="clear-data-ok">Clear browsing data</button>
     </div>
-
-    <webview src="http://www.google.com/" style="width:640px; height:480px"></webview>
+    
+    <webview data-name="webviewContent" src="https://www.netflix.com/browse" style="width:640px; height:480px"></webview>
 
     <div id="sad-webview">
       <div id="sad-webview-icon">&#9762;</div>

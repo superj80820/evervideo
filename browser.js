@@ -1,7 +1,46 @@
 window.onresize = doLayout;
 var isLoading = false;
+const offset = 33;
+let isPin = false;
 
 onload = function() {
+  function downOption () {
+    setLayout(offset)
+    const div = document.getElementById('controls')
+    document.getElementById('controls').style['-webkit-app-region'] = 'drag'
+    div.style.top = '0px'
+    div.style.opacity = '100%'
+  }
+
+  function upOption () {
+    doLayout()
+    const div = document.getElementById('controls')
+    div.style['-webkit-app-region'] = null
+    // div.style.top = '-32px'
+    div.style.opacity = '0%'
+  }
+
+  document.getElementById("draggerHandler").addEventListener("mouseenter", function() {
+    downOption()
+    setTimeout(() => {
+      if (!isPin) upOption()
+    }, 5000)
+  })
+
+  document.querySelector('#selectUri').addEventListener("change", function(uri) {
+    switch (uri.target.value) {
+      case 'Youtube':
+        document.querySelector('webview[data-name="webviewContent"]').setUserAgentOverride(bindings['youtube-tv-mode']);
+        navigateTo('https://youtube.com/tv#')
+        break;
+      case 'Netflix':
+        // Reset UserAgent
+        document.querySelector('webview[data-name="webviewContent"]').setUserAgentOverride('');
+        navigateTo('https://www.netflix.com/browse')
+        break
+    }
+  })
+
   var webview = document.querySelector('webview');
   doLayout();
   webview.focus();
@@ -13,15 +52,37 @@ onload = function() {
 
   document.querySelector('#back').onclick = function() {
     webview.back();
-  };
+  }
+
+  document.querySelector('#pin').onclick = function() {
+    function getImageUri(img) {
+      style = img.currentStyle || window.getComputedStyle(img, false),
+      bi = style.backgroundImage.slice(4, -1).replace(/"/g, "");
+      return bi
+    }
+    const pinObj = document.querySelector('#pin')
+    if (getImageUri(pinObj).match(/pin-outline\.svg/)) {
+      pinObj.style = 'background-image: url(./assets/pin-enable.svg);'
+      downOption()
+      isPin = true;
+    } else if (getImageUri(pinObj).match(/pin-enable\.svg/)) {
+      pinObj.style = 'background-image: url(./assets/pin-outline.svg);'
+      upOption()
+      isPin = false;
+    }
+  }
 
   document.querySelector('#forward').onclick = function() {
     webview.forward();
   };
 
-  document.querySelector('#home').onclick = function() {
-    navigateTo('http://www.google.com/');
+  document.querySelector('#close').onclick = function() {
+    window.close()
   };
+
+  // document.querySelector('#home').onclick = function() {
+  //   navigateTo('http://www.google.com/');
+  // };
 
   document.querySelector('#reload').onclick = function() {
     if (isLoading) {
@@ -38,9 +99,9 @@ onload = function() {
       }
     });
 
-  document.querySelector('#terminate').onclick = function() {
-    webview.terminate();
-  };
+  // document.querySelector('#terminate').onclick = function() {
+  //   webview.terminate();
+  // };
 
   var showClearDataConfirmation = function() {
     document.querySelector('#clear-data-overlay').style.display = '-webkit-box';
@@ -52,7 +113,7 @@ onload = function() {
     document.querySelector('#clear-data-confirm').style.display = 'none';
   };
 
-  document.querySelector('#clear-data').onclick = showClearDataConfirmation;
+  // document.querySelector('#clear-data').onclick = showClearDataConfirmation;
 
   document.querySelector('#clear-data-ok').onclick = function() {
 
@@ -85,10 +146,10 @@ onload = function() {
 
   document.querySelector('#clear-data-cancel').onclick = hideClearDataConfirmation;
 
-  document.querySelector('#location-form').onsubmit = function(e) {
-    e.preventDefault();
-    navigateTo(document.querySelector('#location').value);
-  };
+  // document.querySelector('#location-form').onsubmit = function(e) {
+  //   e.preventDefault();
+  //   navigateTo(document.querySelector('#location').value);
+  // };
 
   webview.addEventListener('exit', handleExit);
   webview.addEventListener('loadstart', handleLoadStart);
@@ -102,86 +163,86 @@ onload = function() {
       typeof(webview.find) == "function") {
     var findMatchCase = false;
 
-    document.querySelector('#zoom').onclick = function() {
-      if(document.querySelector('#zoom-box').style.display == '-webkit-flex') {
-        closeZoomBox();
-      } else {
-        openZoomBox();
-      }
-    };
+    // document.querySelector('#zoom').onclick = function() {
+    //   if(document.querySelector('#zoom-box').style.display == '-webkit-flex') {
+    //     closeZoomBox();
+    //   } else {
+    //     openZoomBox();
+    //   }
+    // };
 
-    document.querySelector('#zoom-form').onsubmit = function(e) {
-      e.preventDefault();
-      var zoomText = document.forms['zoom-form']['zoom-text'];
-      var zoomFactor = Number(zoomText.value);
-      if (zoomFactor > 5) {
-        zoomText.value = "5";
-        zoomFactor = 5;
-      } else if (zoomFactor < 0.25) {
-        zoomText.value = "0.25";
-        zoomFactor = 0.25;
-      }
-      webview.setZoom(zoomFactor);
-    }
+    // document.querySelector('#zoom-form').onsubmit = function(e) {
+    //   e.preventDefault();
+    //   var zoomText = document.forms['zoom-form']['zoom-text'];
+    //   var zoomFactor = Number(zoomText.value);
+    //   if (zoomFactor > 5) {
+    //     zoomText.value = "5";
+    //     zoomFactor = 5;
+    //   } else if (zoomFactor < 0.25) {
+    //     zoomText.value = "0.25";
+    //     zoomFactor = 0.25;
+    //   }
+    //   webview.setZoom(zoomFactor);
+    // }
 
-    document.querySelector('#zoom-in').onclick = function(e) {
-      e.preventDefault();
-      increaseZoom();
-    }
+    // document.querySelector('#zoom-in').onclick = function(e) {
+    //   e.preventDefault();
+    //   increaseZoom();
+    // }
 
-    document.querySelector('#zoom-out').onclick = function(e) {
-      e.preventDefault();
-      decreaseZoom();
-    }
+    // document.querySelector('#zoom-out').onclick = function(e) {
+    //   e.preventDefault();
+    //   decreaseZoom();
+    // }
 
-    document.querySelector('#find').onclick = function() {
-      if(document.querySelector('#find-box').style.display == 'block') {
-        document.querySelector('webview').stopFinding();
-        closeFindBox();
-      } else {
-        openFindBox();
-      }
-    };
+    // document.querySelector('#find').onclick = function() {
+    //   if(document.querySelector('#find-box').style.display == 'block') {
+    //     document.querySelector('webview').stopFinding();
+    //     closeFindBox();
+    //   } else {
+    //     openFindBox();
+    //   }
+    // };
 
-    document.querySelector('#find-text').oninput = function(e) {
-      webview.find(document.forms['find-form']['find-text'].value,
-                   {matchCase: findMatchCase});
-    }
+    // document.querySelector('#find-text').oninput = function(e) {
+    //   webview.find(document.forms['find-form']['find-text'].value,
+    //                {matchCase: findMatchCase});
+    // }
 
-    document.querySelector('#find-text').onkeydown = function(e) {
-      if (event.ctrlKey && event.keyCode == 13) {
-        e.preventDefault();
-        webview.stopFinding('activate');
-        closeFindBox();
-      }
-    }
+    // document.querySelector('#find-text').onkeydown = function(e) {
+    //   if (event.ctrlKey && event.keyCode == 13) {
+    //     e.preventDefault();
+    //     webview.stopFinding('activate');
+    //     closeFindBox();
+    //   }
+    // }
 
-    document.querySelector('#match-case').onclick = function(e) {
-      e.preventDefault();
-      findMatchCase = !findMatchCase;
-      var matchCase = document.querySelector('#match-case');
-      if (findMatchCase) {
-        matchCase.style.color = "blue";
-        matchCase.style['font-weight'] = "bold";
-      } else {
-        matchCase.style.color = "black";
-        matchCase.style['font-weight'] = "";
-      }
-      webview.find(document.forms['find-form']['find-text'].value,
-                   {matchCase: findMatchCase});
-    }
+    // document.querySelector('#match-case').onclick = function(e) {
+    //   e.preventDefault();
+    //   findMatchCase = !findMatchCase;
+    //   var matchCase = document.querySelector('#match-case');
+    //   if (findMatchCase) {
+    //     matchCase.style.color = "blue";
+    //     matchCase.style['font-weight'] = "bold";
+    //   } else {
+    //     matchCase.style.color = "black";
+    //     matchCase.style['font-weight'] = "";
+    //   }
+    //   webview.find(document.forms['find-form']['find-text'].value,
+    //                {matchCase: findMatchCase});
+    // }
 
-    document.querySelector('#find-backward').onclick = function(e) {
-      e.preventDefault();
-      webview.find(document.forms['find-form']['find-text'].value,
-                   {backward: true, matchCase: findMatchCase});
-    }
+    // document.querySelector('#find-backward').onclick = function(e) {
+    //   e.preventDefault();
+    //   webview.find(document.forms['find-form']['find-text'].value,
+    //                {backward: true, matchCase: findMatchCase});
+    // }
 
-    document.querySelector('#find-form').onsubmit = function(e) {
-      e.preventDefault();
-      webview.find(document.forms['find-form']['find-text'].value,
-                   {matchCase: findMatchCase});
-    }
+    // document.querySelector('#find-form').onsubmit = function(e) {
+    //   e.preventDefault();
+    //   webview.find(document.forms['find-form']['find-text'].value,
+    //                {matchCase: findMatchCase});
+    // }
 
     webview.addEventListener('findupdate', handleFindUpdate);
     window.addEventListener('keydown', handleKeyDown);
@@ -209,8 +270,24 @@ function doLayout() {
   var windowWidth = document.documentElement.clientWidth;
   var windowHeight = document.documentElement.clientHeight;
   var webviewWidth = windowWidth;
-  var webviewHeight = windowHeight - controlsHeight;
+  var webviewHeight = windowHeight - controlsHeight + offset;
+  webview.style.width = webviewWidth + 'px';
+  webview.style.height = webviewHeight + 'px';
 
+  var sadWebview = document.querySelector('#sad-webview');
+  sadWebview.style.width = webviewWidth + 'px';
+  sadWebview.style.height = webviewHeight * 2/3 + 'px';
+  sadWebview.style.paddingTop = webviewHeight/3 + 'px';
+}
+
+function setLayout(height) {
+  var webview = document.querySelector('webview');
+  var controls = document.querySelector('#controls');
+  var controlsHeight = controls.offsetHeight;
+  var windowWidth = document.documentElement.clientWidth;
+  var windowHeight = document.documentElement.clientHeight;
+  var webviewWidth = windowWidth;
+  var webviewHeight = windowHeight - controlsHeight + offset - height;
   webview.style.width = webviewWidth + 'px';
   webview.style.height = webviewHeight + 'px';
 
@@ -302,7 +379,7 @@ function handleLoadCommit(event) {
     return;
   }
 
-  document.querySelector('#location').value = event.url;
+  // document.querySelector('#location').value = event.url;
 
   var webview = document.querySelector('webview');
   document.querySelector('#back').disabled = !webview.canGoBack();
@@ -313,18 +390,20 @@ function handleLoadCommit(event) {
 function handleLoadStart(event) {
   document.body.classList.add('loading');
   isLoading = true;
+  document.querySelector('#reload').style = 'background-image: url(./assets/loading.svg);'
 
   resetExitedState();
   if (!event.isTopLevel) {
     return;
   }
 
-  document.querySelector('#location').value = event.url;
+  // document.querySelector('#location').value = event.url;
 }
 
 function handleLoadStop(event) {
   // We don't remove the loading class immediately, instead we let the animation
   // finish, so that the spinner doesn't jerkily reset back to the 0 position.
+  document.querySelector('#reload').style = 'background-image: url(./assets/reload.svg);'
   isLoading = false;
 }
 
@@ -341,7 +420,7 @@ function handleLoadRedirect(event) {
     return;
   }
 
-  document.querySelector('#location').value = event.newUrl;
+  // document.querySelector('#location').value = event.newUrl;
 }
 
 function getNextPresetZoom(zoomFactor) {
@@ -390,24 +469,24 @@ function openZoomBox() {
   });
 }
 
-function closeZoomBox() {
-  document.querySelector('#zoom-box').style.display = 'none';
-}
+// function closeZoomBox() {
+  // document.querySelector('#zoom-box').style.display = 'none';
+// }
 
 function openFindBox() {
   document.querySelector('#find-box').style.display = 'block';
   document.forms['find-form']['find-text'].select();
 }
 
-function closeFindBox() {
-  var findBox = document.querySelector('#find-box');
-  findBox.style.display = 'none';
-  findBox.style.left = "";
-  findBox.style.opacity = "";
-  document.querySelector('#find-results').innerText= "";
-}
+// function closeFindBox() {
+//   var findBox = document.querySelector('#find-box');
+//   findBox.style.display = 'none';
+//   findBox.style.left = "";
+//   findBox.style.opacity = "";
+//   document.querySelector('#find-results').innerText= "";
+// }
 
 function closeBoxes() {
-  closeZoomBox();
-  closeFindBox();
+  // closeZoomBox();
+  // closeFindBox();
 }

@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "Browser Sample",
+  "name": "pip-netflix",
   "minimum_chrome_version": "24.0.1307.0",
   "version": "2.3.3",
   "icons": {
@@ -13,6 +13,7 @@
     }
   },
   "permissions": [
-    "webview"
+    "webview",
+    "alwaysOnTopWindows"
   ]
 }

@@ -28,6 +28,17 @@ function runApp() {
     innerBounds: {
       'width': 1024,
       'height': 768
-    }
-  });
+    },
+    frame: "none",
+    resizable: true,
+    alwaysOnTop: true
+  }, function (appwindow) {
+      // workaround. should not use `onloadstart`. should use `onload`
+        appwindow.contentWindow.onloadstart = function () {
+            appwindow.contentWindow.document.getElementById('minimize').onclick = function () {
+                appwindow.minimize();
+            }
+        }
+    })
 }
+

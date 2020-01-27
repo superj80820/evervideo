@@ -9,14 +9,28 @@ input {
   outline: none;
 }
 
+#draggerHandler {
+  position: absolute;
+  width: 100%;
+  height: 10px;
+  z-index: 1;
+}
+
 #controls {
+  opacity: 0%;
+  justify-content: flex-end;
+  position: relative;
   padding: 3px;
+  top: -30px;
+  transition: all 0.2s linear;
   border-bottom: solid 1px #ccc;
   background-color: #eee;
 }
 
 #controls button,
+#controls select,
 #controls input {
+  -webkit-app-region: no-drag;
   font-size: 14px;
   line-height: 24px;
   border-radius: 2px;
@@ -59,6 +73,51 @@ compared to the back/forward buttons */
 
 #controls #reload {
   font-size: 20px;
+  background-image: url(./assets/reload.svg);
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left: 20px;
+  height: 25px;
+}
+
+#controls #pin {
+  background-image: url(./assets/pin-outline.svg);
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left: 20px;
+  height: 25px;
+}
+
+#controls #back {
+  background-image: url(./assets/arrow-left.svg);
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left: 20px;
+  height: 25px;
+}
+
+#controls #forward {
+  background-image: url(./assets/arrow-right.svg);
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left: 20px;
+  height: 25px;
+}
+
+#controls #minimize {
+  background-image: url(./assets/window-minimize.svg);
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left: 20px;
+  height: 25px;
+}
+
+#controls #close {
+  background-image: url(./assets/close-circle.svg);
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left: 20px;
+  height: 25px;
 }
 
 #controls #zoom,
@@ -253,14 +312,15 @@ compared to the back/forward buttons */
 #sad-webview,
 webview {
   position: absolute;
+  transition: all 0.2s linear;
   bottom: 0;
   left: 0;
 }
 
 /* The reload button turns into a spinning trobber */
 .loading #reload {
-  -webkit-animation: spinner-animation .5s infinite linear;
-  -webkit-transform-origin: 50% 55.5%;
+  /* -webkit-animation: spinner-animation .5s infinite linear;
+  -webkit-transform-origin: 50% 55.5%; */
 }
 
 @-webkit-keyframes spinner-animation {
