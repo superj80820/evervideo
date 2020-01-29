@@ -4,6 +4,8 @@ const offset = 33;
 let isPin = false;
 const youtubeUrl = 'https://youtube.com/tv#'
 const netflixUrl = 'https://www.netflix.com/browse'
+const VERSION = "1.1.0"
+
 /**
  * Bindings that depend on the particular collection of webviews in browser.html
  *
@@ -41,7 +43,30 @@ function switchYoutubeOrNetflix (conditions) {
   }
 }
 
-onload = function() {
+function getUpdateNotification () {
+  return fetch('https://api.github.com/repos/superj80820/evervideo/releases')
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(json) {
+    return json
+  });
+}
+
+async function checkVersion (version) {
+  const updateNotifyObj = document.getElementById('updateNotify')
+  const originVersionArray = await getUpdateNotification()
+  const originVersionName = originVersionArray[0].tag_name
+  if (version !== originVersionName) {
+    updateNotifyObj.title = originVersionArray[0].body
+    updateNotifyObj.style.display = "block"
+    updateNotifyObj.onclick = () => {
+      window.open(`https://github.com/superj80820/evervideo/archive/${originVersionName}.zip`, 'Yahoo', config='height=500,width=500');
+    }
+  }
+}
+
+onload = async function() {
   function downOption () {
     setLayout(offset)
     const div = document.getElementById('controls')
@@ -57,6 +82,8 @@ onload = function() {
     div.style.top = `-${offset}px`
     div.style.opacity = '0%'
   }
+
+  checkVersion(VERSION)
 
   document.getElementById("draggerHandler").addEventListener("mouseenter", function() {
     downOption()

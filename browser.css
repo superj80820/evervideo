@@ -80,6 +80,16 @@ compared to the back/forward buttons */
   height: 25px;
 }
 
+#controls #updateNotify {
+  font-size: 20px;
+  background-image: url(./assets/updateNotify.svg);
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left: 20px;
+  height: 25px;
+  display: none;
+}
+
 #controls #pin {
   background-image: url(./assets/pin-outline.svg);
   background-repeat: no-repeat;
