@@ -4,7 +4,7 @@
 
 可以讓Netflix以一個小視窗顯示在螢幕上方 然後邊做事邊看片(可顯示字幕)
 
-![](https://i.imgur.com/C5xRCUN.gif)
+![](https://i.imgur.com/t3RV2C6.gif)
 
 除了Netflix 這個插件也可以用來看Youtube 以下是他的功能圖
 
